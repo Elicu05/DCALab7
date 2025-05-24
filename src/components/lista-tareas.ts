@@ -1,7 +1,8 @@
-import { Task, TaskService } from '../services/task-service';
-import { TodoItem } from './todo-item';
+import { TaskService } from '../services/task-service';
+import { Task } from '../services/task-service';
+import { TareaItem } from './tarea-item';
 
-export class TodoList extends HTMLElement {
+export class ListaTareas extends HTMLElement {
     private taskService: TaskService;
     private tasks: Task[] = [];
 
@@ -195,7 +196,7 @@ export class TodoList extends HTMLElement {
         // Initialize todo items
         const todoItems = this.shadowRoot.querySelectorAll('todo-item');
         todoItems.forEach((item) => {
-            const todoItem = item as TodoItem;
+            const todoItem = item as TareaItem;
             const index = parseInt(item.getAttribute('data-index') || '0');
             todoItem.addEventListener('toggle', (e: Event) => {
                 const customEvent = e as CustomEvent<{ index: number; completed: boolean }>;
@@ -209,4 +210,4 @@ export class TodoList extends HTMLElement {
     }
 }
 
-customElements.define('todo-list', TodoList); 
+customElements.define('todo-list', ListaTareas); 

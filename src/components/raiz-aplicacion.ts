@@ -1,7 +1,9 @@
 import { AuthService } from '../services/auth-service';
 import { User } from 'firebase/auth';
+import { ListaTareas } from './lista-tareas';
+import { FormularioLogin } from './formulario-login';
 
-export class AppRoot extends HTMLElement {
+export class RaizAplicacion extends HTMLElement {
     private authService: AuthService;
     private currentUser: User | null = null;
 

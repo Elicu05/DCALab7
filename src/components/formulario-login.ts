@@ -1,6 +1,6 @@
 import { AuthService } from '../services/auth-service';
 
-export class LoginForm extends HTMLElement {
+export class FormularioLogin extends HTMLElement {
     private authService: AuthService;
     private isLogin = true;
     private failedAttempts = 0;
@@ -377,4 +377,4 @@ export class LoginForm extends HTMLElement {
     }
 }
 
-customElements.define('login-form', LoginForm); 
+customElements.define('login-form', FormularioLogin); 

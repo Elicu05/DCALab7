@@ -1,6 +1,7 @@
 import { Task } from '../services/task-service';
+import { TaskService } from '../services/task-service';
 
-export class TodoItem extends HTMLElement {
+export class TareaItem extends HTMLElement {
     private task!: Task;
     private index!: number;
 
@@ -141,4 +142,4 @@ export class TodoItem extends HTMLElement {
     }
 }
 
-customElements.define('todo-item', TodoItem); 
+customElements.define('todo-item', TareaItem); 

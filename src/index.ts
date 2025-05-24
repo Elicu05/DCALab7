@@ -1,18 +1,18 @@
 import { app as firebaseApp } from './Firebase/firebase-config';
-import { AppRoot } from './components/app-root';
-import { TodoList } from './components/todo-list';
-import { TodoItem } from './components/todo-item';
-import { LoginForm } from './components/login-form';
+import { RaizAplicacion } from './components/raiz-aplicacion';
+import { ListaTareas } from './components/lista-tareas';
+import { TareaItem } from './components/tarea-item';
+import { FormularioLogin } from './components/formulario-login';
 import { AuthService } from './services/auth-service';
 
 // Define custom elements
-customElements.define('app-root', AppRoot);
-customElements.define('todo-list', TodoList);
-customElements.define('todo-item', TodoItem);
-customElements.define('login-form', LoginForm);
+customElements.define('app-root', RaizAplicacion);
+customElements.define('todo-list', ListaTareas);
+customElements.define('todo-item', TareaItem);
+customElements.define('login-form', FormularioLogin);
 
 // Initialize app
-const app = new AppRoot();
+const app = new RaizAplicacion();
 document.body.appendChild(app);
 
 // Register custom elements
