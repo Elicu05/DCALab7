@@ -54,18 +54,17 @@ export class TareasContainer extends HTMLElement {
             <style>
                 :host {
                     display: block;
-                    max-width: 800px;
+                    max-width: 1200px;
                     margin: 2rem auto;
                     padding: 0 2rem;
+                    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
+                    border-radius: 24px;
                 }
                 .tareas-container {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.75rem;
-                    padding: 1rem;
-                    background: #FFF0F5;
-                    border-radius: 20px;
-                    border: 2px solid #FFB6C1;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                    gap: 2.5rem;
+                    padding: 2rem 1rem;
                 }
                 .empty-state {
                     text-align: center;
@@ -75,6 +74,19 @@ export class TareasContainer extends HTMLElement {
                     border-radius: 15px;
                     font-size: 1.1rem;
                     border: 2px dashed #FFB6C1;
+                    grid-column: 1 / -1;
+                }
+                todo-item {
+                    display: block;
+                    height: 100%;
+                    /* El fondo y sombra ahora lo maneja el propio todo-item */
+                    background: transparent;
+                    box-shadow: none;
+                    border: none;
+                }
+                todo-item:hover {
+                    box-shadow: none;
+                    border: none;
                 }
             </style>
             <div class="tareas-container">
