@@ -3,7 +3,7 @@ import { User } from 'firebase/auth';
 import { ListaTareas } from './lista-tareas';
 import { FormularioLogin } from './formulario-login';
 
-export class RaizAplicacion extends HTMLElement {
+export class AppContainer extends HTMLElement {
     private authService: AuthService;
     private currentUser: User | null = null;
 
@@ -14,14 +14,23 @@ export class RaizAplicacion extends HTMLElement {
     }
 
     connectedCallback() {
+        this.render();
+        this.setupAuthListener();
+    }
+
+    private setupAuthListener() {
         this.authService.onAuthStateChanged((user) => {
             this.currentUser = user;
             this.render();
         });
     }
 
-    private handleSignOut() {
-        this.authService.signOut();
+    private async handleSignOut() {
+        try {
+            await this.authService.signOut();
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
     }
 
     render() {
@@ -114,9 +123,9 @@ export class RaizAplicacion extends HTMLElement {
             ${this.currentUser ? `
                 <div class="header">
                     <div class="user-info">
-                        <span>Todo List Kawai</span>
+                        <span>${this.currentUser.displayName || 'User'}</span>
                     </div>
-                    <button class="sign-out-btn" @click=${this.handleSignOut.bind(this)}>Sign Out</button>
+                    <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
                 </div>
                 <todo-list></todo-list>
             ` : `
@@ -124,8 +133,10 @@ export class RaizAplicacion extends HTMLElement {
             `}
         `;
 
-        // Add event listeners
-        const signOutBtn = this.shadowRoot.querySelector('.sign-out-btn');
-        signOutBtn?.addEventListener('click', this.handleSignOut.bind(this));
+        // Add event listener for sign out button
+        const signOutBtn = this.shadowRoot.getElementById('signOutBtn');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', () => this.handleSignOut());
+        }
     }
 } 
