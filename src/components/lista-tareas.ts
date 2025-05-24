@@ -1,10 +1,7 @@
 import { TaskService } from '../services/task-service';
-import { Task } from '../services/task-service';
-import { TareaItem } from './tarea-item';
 
 export class ListaTareas extends HTMLElement {
     private taskService: TaskService;
-    private tasks: Task[] = [];
 
     constructor() {
         super();
@@ -13,12 +10,7 @@ export class ListaTareas extends HTMLElement {
     }
 
     async connectedCallback() {
-        await this.loadTasks();
         this.render();
-    }
-
-    private async loadTasks() {
-        this.tasks = await this.taskService.getTasks();
     }
 
     private async handleAdd(event: Event) {
@@ -30,23 +22,9 @@ export class ListaTareas extends HTMLElement {
         if (title) {
             await this.taskService.addTask(title);
             input.value = '';
-            await this.loadTasks();
-            this.render();
+            // Dispatch an event to notify tareas-container to refresh
+            document.dispatchEvent(new CustomEvent('task-added'));
         }
-    }
-
-    private async handleToggle(event: CustomEvent<{ index: number; completed: boolean }>) {
-        const { index, completed } = event.detail;
-        await this.taskService.toggleTask(index, completed);
-        await this.loadTasks();
-        this.render();
-    }
-
-    private async handleDelete(event: CustomEvent<{ index: number }>) {
-        const { index } = event.detail;
-        await this.taskService.deleteTask(index);
-        await this.loadTasks();
-        this.render();
     }
 
     render() {
@@ -62,7 +40,7 @@ export class ListaTareas extends HTMLElement {
                     font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
                 }
                 .container {
-                    background: #FFE4E1; /* Misty Rose background */
+                    background: #FFE4E1;
                     border-radius: 20px;
                     box-shadow: 0 8px 24px rgba(255, 182, 193, 0.3);
                     padding: 2rem;
@@ -70,11 +48,11 @@ export class ListaTareas extends HTMLElement {
                     border: 3px solid #FFB6C1;
                 }
                 .container:hover {
-                    background: #FFF0F5; /* Lavender Blush */
+                    background: #FFF0F5;
                     transform: translateY(-2px);
                 }
                 h1 {
-                    color: #FF69B4; /* Hot Pink */
+                    color: #FF69B4;
                     text-align: center;
                     margin-bottom: 2rem;
                     font-size: 2rem;
@@ -109,7 +87,7 @@ export class ListaTareas extends HTMLElement {
                 }
                 button {
                     padding: 1rem 2rem;
-                    background: #FFC0CB; /* Pink */
+                    background: #FFC0CB;
                     color: #FFFFFF;
                     border: 2px solid #FFB6C1;
                     border-radius: 25px;
@@ -133,29 +111,6 @@ export class ListaTareas extends HTMLElement {
                     transform: scale(0.98);
                     box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
                 }
-                .todo-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.75rem;
-                }
-                .empty-state {
-                    text-align: center;
-                    color: #FF69B4;
-                    padding: 3rem 1rem;
-                    background: #FFF0F5;
-                    border-radius: 20px;
-                    font-size: 1.1rem;
-                    border: 2px dashed #FFB6C1;
-                }
-                .stats {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 2rem;
-                    padding-top: 1rem;
-                    border-top: 2px solid #FFB6C1;
-                    color: #FF69B4;
-                    font-size: 0.875rem;
-                }
                 .add-icon {
                     width: 20px;
                     height: 20px;
@@ -175,38 +130,12 @@ export class ListaTareas extends HTMLElement {
                         Add Task
                     </button>
                 </form>
-                <div class="todo-list">
-                    ${this.tasks.length === 0 
-                        ? '<div class="empty-state">🌟 No tasks yet. Add one above to get started! 🌟</div>'
-                        : this.tasks.map((task, index) => `
-                            <todo-item 
-                                data-title="${task.title}"
-                                data-completed="${task.completed}"
-                                data-index="${index}">
-                            </todo-item>
-                        `).join('')}
-                </div>
             </div>
         `;
 
         // Add event listeners to the form
         const form = this.shadowRoot.querySelector('form');
         form?.addEventListener('submit', this.handleAdd.bind(this));
-
-        // Initialize todo items
-        const todoItems = this.shadowRoot.querySelectorAll('todo-item');
-        todoItems.forEach((item) => {
-            const todoItem = item as TareaItem;
-            const index = parseInt(item.getAttribute('data-index') || '0');
-            todoItem.addEventListener('toggle', (e: Event) => {
-                const customEvent = e as CustomEvent<{ index: number; completed: boolean }>;
-                this.handleToggle(customEvent);
-            });
-            todoItem.addEventListener('delete', (e: Event) => {
-                const customEvent = e as CustomEvent<{ index: number }>;
-                this.handleDelete(customEvent);
-            });
-        });
     }
 }
 

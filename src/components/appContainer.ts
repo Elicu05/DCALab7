@@ -20,7 +20,6 @@ export class AppContainer extends HTMLElement {
 
     private setupAuthListener() {
         this.authService.onAuthStateChanged((user) => {
-            this.currentUser = user;
             this.render();
         });
     }
@@ -35,6 +34,8 @@ export class AppContainer extends HTMLElement {
 
     render() {
         if (!this.shadowRoot) return;
+
+        const user = this.authService.getCurrentUser();
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -89,6 +90,10 @@ export class AppContainer extends HTMLElement {
                     font-weight: 600;
                     font-size: 1.1rem;
                 }
+                .user-info::before {
+                    content: '👤';
+                    font-size: 1.2rem;
+                }
                 .sign-out-btn {
                     padding: 0.75rem 1.5rem;
                     background: #FFC0CB;
@@ -120,14 +125,15 @@ export class AppContainer extends HTMLElement {
                     box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
                 }
             </style>
-            ${this.currentUser ? `
+            ${user ? `
                 <div class="header">
                     <div class="user-info">
-                        <span>${this.currentUser.displayName || 'User'}</span>
+                        <span>${user.displayName || 'User'}</span>
                     </div>
                     <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
                 </div>
                 <todo-list></todo-list>
+                <tareas-container></tareas-container>
             ` : `
                 <login-form></login-form>
             `}
@@ -139,4 +145,6 @@ export class AppContainer extends HTMLElement {
             signOutBtn.addEventListener('click', () => this.handleSignOut());
         }
     }
-} 
+}
+
+customElements.define('app-root', AppContainer); 

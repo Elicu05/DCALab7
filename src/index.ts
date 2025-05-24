@@ -4,11 +4,13 @@ import { ListaTareas } from './components/lista-tareas';
 import { TareaItem } from './components/tarea-item';
 import { FormularioLogin } from './components/formulario-login';
 import { AuthService } from './services/auth-service';
+import { TareasContainer } from './components/tareas-container';
 
 // Define custom elements
 customElements.define('app-root', AppContainer);
 customElements.define('todo-list', ListaTareas);
 customElements.define('todo-item', TareaItem);
+customElements.define('tareas-container', TareasContainer);
 customElements.define('login-form', FormularioLogin);
 
 // Initialize app
